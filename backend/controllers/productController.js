@@ -1,5 +1,4 @@
 import Product from "../models/Product.js";
-import cloudinary from "../config/cloudinary.js";
 
 export const getProducts = async (req, res) => {
   try {
@@ -32,15 +31,13 @@ export const addProduct = async (req, res) => {
       return res.status(400).json({ message: "Image is required" });
     }
 
-    const result = await cloudinary.v2.uploader.upload(req.file.path, {
-      folder: "olx-products",
-    });
+    const imageUrl = `/uploads/${req.file.filename}`;
 
     const product = await Product.create({
       title,
       price,
       location,
-      image: result.secure_url,
+      image: imageUrl,
       createdBy: req.user.id,
       soldOut: false,
     });
@@ -77,10 +74,7 @@ export const updateProduct = async (req, res) => {
     product.location = location;
 
     if (req.file) {
-      const result = await cloudinary.v2.uploader.upload(req.file.path, {
-        folder: "olx-products",
-      });
-      product.image = result.secure_url;
+      product.image = `/uploads/${req.file.filename}`;
     }
 
     await product.save();
