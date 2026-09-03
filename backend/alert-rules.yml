@@ -1,0 +1,15 @@
+groups:
+  - name: olx-backend-alerts
+
+    rules:
+      - alert: OLXBackendDown
+        expr: up{job="olx-backend"} == 0
+        for: 10s
+
+        labels:
+          priority: P2
+          severity: HIGH
+
+        annotations:
+          summary: "OLX backend is down"
+          description: "OLX backend has been unreachable for more than 10 seconds."

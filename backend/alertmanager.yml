@@ -1,0 +1,11 @@
+global:
+  resolve_timeout: 5m
+
+route:
+  receiver: "resolvehub"
+
+receivers:
+  - name: "resolvehub"
+    webhook_configs:
+      - url: "http://host.docker.internal:5555/api/monitoring-projects/integrations/79f0ea9c-e0a3-464e-aa25-91592fd68910/webhook"
+        send_resolved: true
