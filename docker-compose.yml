@@ -1,0 +1,36 @@
+services:
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: olx-frontend
+    ports:
+      - "5173:80"
+    depends_on:
+      - backend
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: olx-backend
+    ports:
+      - "5005:5005"
+    environment:
+      MONGO: mongodb://mongodb:27017/olx-clone
+      SECRET: olxsecret
+      EXPIRES: 1h
+    depends_on:
+      - mongodb
+
+  mongodb:
+    image: mongo:8
+    container_name: olx-mongodb
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+
+volumes:
+  mongodb_data:
